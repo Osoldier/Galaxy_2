@@ -26,7 +26,7 @@ public class Main implements Runnable {
 	
 	//SPE
 	private Galaxy galaxy = null;
-	private int timeStepSize = 100000;
+	private int timeStepSize = 1000000;
 	private Renderer glRenderer;
 	
 	//BASE

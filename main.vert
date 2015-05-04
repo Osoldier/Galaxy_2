@@ -1,5 +1,5 @@
 #version 120
-//precision highp float;
+precision highp float;
 
 attribute vec3 av3VertexPosition;
 attribute vec3 av3VertexColor;

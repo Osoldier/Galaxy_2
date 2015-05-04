@@ -39,11 +39,27 @@ public class Renderer {
 		main = new Shader("main.vert", "main.frag");
 		main.setUniformMat4f("pr_matrix", pr_matrix);
 	}
+	
+	private void initGL() {
+		GLContext.createFromCurrent();
+		glEnable(GL_BLEND);
+		glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+		glEnable(GL_POINT_SPRITE);
+		glEnable(GL_TEXTURE_2D);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		glClearColor(0, 0, 0.03f, 1);
+
+		particleTexture = new Texture("/particle.png");
+		float ffr = (float) (galaxy.GetFarFieldRad());
+		pr_matrix = new ProjectionMatrix(-ffr, ffr, -ffr, ffr, -1, 10);
+
+	}
+
 
 	public void RenderScene() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		main.setUniform("us2dTexture", 0);
-		glActiveTexture(GL_TEXTURE0);
+		main.setUniform("us2dTexture", particleTexture.getId());
+		glActiveTexture(GL_TEXTURE0+particleTexture.getId());
 		particleTexture.bind();
 		galaxy.ml_matrix.Identity();
 		main.setUniformMat4f("ml_matrix", galaxy.ml_matrix);
@@ -195,23 +211,12 @@ public class Renderer {
 		result.put(array).flip();
 		return result;
 	}
-
-	private void initGL() {
-		GLContext.createFromCurrent();
-		glEnable(GL_BLEND);
-		glEnable(GL_TEXTURE_2D);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-		glClearColor(0, 0, 0.03f, 1);
-
-		particleTexture = new Texture("/particle.png");
-		float ffr = (float) (galaxy.GetFarFieldRad());
-		pr_matrix = new ProjectionMatrix(-ffr, ffr, -ffr, ffr, -1, 10);
-
-	}
-
+	
 	private Color colorFromTemperature(double temp) {
-		Color c = Color.WHITE;
-		return c;
+		int idx = (int) Math.floor((temp - m_t0) / (m_t1-m_t0) * m_colNum);
+		idx = Math.min(m_colNum-1, idx);
+		idx = Math.max(0, idx);
+		return StarColor.ColorsByTemp[idx];
 	}
 
 }

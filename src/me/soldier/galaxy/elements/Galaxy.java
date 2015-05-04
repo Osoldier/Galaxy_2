@@ -67,7 +67,7 @@ public class Galaxy {
 		m_radCore = radCore;
 		m_radGalaxy = rad;
 		m_radFarField = m_radGalaxy * 2;
-		m_sigma = 0.45;
+		m_sigma = 0.5;
 		m_numStars = numStars;
 		m_numDust = (int) (numStars / 2);
 		m_numH2 = 200;
@@ -85,7 +85,7 @@ public class Galaxy {
 	}
 
 	public Galaxy() {
-		this(15000, 6000, 0.019, 0.8, 1.0, 200, 300, 5000);
+		this(16000, 4000, 0.0004, 0.9, 0.9, 200, 300, 50000);
 	}
 
 	public double rnd_spread(double v, double o) {
@@ -93,6 +93,9 @@ public class Galaxy {
 	}
 
 	private void InitStars(double sigma) {
+		m_pStars = new ArrayList<Star>();
+		m_pDust = new ArrayList<Star>();
+		m_pH2 = new ArrayList<Star>();
 		for (int i = 0; i < m_numDust; i++) {
 			m_pDust.add(new Star());
 		}
@@ -151,10 +154,10 @@ public class Galaxy {
 			m_pStars.get(i).m_velTheta = GetOrbitalVelocity(rad);
 			m_pStars.get(i).m_center = new Vector2f(0, 0);
 			m_pStars.get(i).m_temp = 6000 + (6000 * Math.random()) - 3000;
-			m_pStars.get(i).m_mag = 0.1 + 0.4 * Math.random();
-
-			if(Double.isInfinite(m_pStars.get(i).m_velTheta)) {
-				System.out.println(i);
+			m_pStars.get(i).m_mag = 0.1 + 0.4 * Math.random();			
+			
+			if(i == 9) {
+				System.out.println(m_radFarField);
 			}
 			
 			int idx = (int) Math.floor(Math.min(1.0 / dh * (m_pStars.get(i).m_a + m_pStars.get(i).m_b) / 2.0, 99.0));

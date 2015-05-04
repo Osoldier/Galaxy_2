@@ -37,7 +37,7 @@ public class Star {
 		double beta = -m_angle;
 		double alpha = theta * DEG_TO_RAD;
 
-		if(Double.isInfinite(alpha)) {
+		if(Double.isInfinite(alpha) || Double.isInfinite(beta)) {
 			return this.m_pos;
 		}
 		
@@ -48,7 +48,7 @@ public class Star {
 
 		Vector2f posOld = new Vector2f(m_pos.x, m_pos.y);
 		m_pos.x = (float) (p.x + (a * cosalpha * cosbeta - b * sinalpha * sinbeta));
-		m_pos.y = (float) (p.y + (a * cosalpha * cosbeta + b * sinalpha * sinbeta));
+		m_pos.y = (float) (p.y + (a * cosalpha * sinbeta + b * sinalpha * cosbeta));
 		
 		m_vel.x = m_pos.x - posOld.x;
 		m_vel.y = m_pos.y - posOld.y;
