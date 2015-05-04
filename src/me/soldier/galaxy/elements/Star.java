@@ -48,11 +48,11 @@ public class Star {
 
 		Vector2f posOld = new Vector2f(m_pos.x, m_pos.y);
 		m_pos.x = (float) (p.x + (a * cosalpha * cosbeta - b * sinalpha * sinbeta));
-		m_pos.x = (float) (p.y + (a * cosalpha * cosbeta + b * sinalpha * sinbeta));
+		m_pos.y = (float) (p.y + (a * cosalpha * cosbeta + b * sinalpha * sinbeta));
 		
 		m_vel.x = m_pos.x - posOld.x;
 		m_vel.y = m_pos.y - posOld.y;
-		
+				
 		return m_pos;
 	}
 	

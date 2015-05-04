@@ -14,7 +14,7 @@ import org.lwjgl.opengl.*;
 import me.soldier.galaxy.core.*;
 import me.soldier.galaxy.elements.*;
 
-//TODO Passer les positions aux shaders au lieu de recréer les buffers
+//TODO Passer les positions aux shaders au lieu de recréer les buffers, ou utiliser dynamic_draw
 public class Renderer {
 
 	int m_colNum = 200;
@@ -42,10 +42,9 @@ public class Renderer {
 
 	public void RenderScene() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		main.setUniform("us2dTexture", 0);
 		glActiveTexture(GL_TEXTURE0);
 		particleTexture.bind();
-		main.setUniform("us2dTexture", 0);
 		galaxy.ml_matrix.Identity();
 		main.setUniformMat4f("ml_matrix", galaxy.ml_matrix);
 		main.useShader();
@@ -53,8 +52,6 @@ public class Renderer {
 		RenderStars();
 		RenderDust();
 		RenderH2();
-
-		//renderSquare();
 	}
 
 	private void RenderSprites(float[] vertices, float[] colors, float[] sizes) {
@@ -202,11 +199,12 @@ public class Renderer {
 	private void initGL() {
 		GLContext.createFromCurrent();
 		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		glClearColor(0, 0, 0.03f, 1);
 
 		particleTexture = new Texture("/particle.png");
-		float ffr = (float) (galaxy.GetFarFieldRad() * 0.6f);
+		float ffr = (float) (galaxy.GetFarFieldRad());
 		pr_matrix = new ProjectionMatrix(-ffr, ffr, -ffr, ffr, -1, 10);
 
 	}
