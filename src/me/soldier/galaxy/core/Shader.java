@@ -121,8 +121,8 @@ public final class Shader {
 	private String readFileAsString(String filename) throws Exception {
 		StringBuilder source = new StringBuilder();
 
-		FileInputStream in = new FileInputStream(filename);
-
+		//FileInputStream in = new FileInputStream(filename);
+		InputStream in = ClassLoader.getSystemResourceAsStream(filename);
 		Exception exception = null;
 
 		BufferedReader reader;

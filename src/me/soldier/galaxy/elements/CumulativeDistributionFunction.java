@@ -2,7 +2,7 @@ package me.soldier.galaxy.elements;
 
 import java.util.*;
 
-//OK
+//Corriger ValFromProp et PropFromVal
 public class CumulativeDistributionFunction {
 
 	double m_fMin = 0;

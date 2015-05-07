@@ -5,7 +5,6 @@ import java.util.*;
 import me.soldier.galaxy.core.*;
 import static me.soldier.galaxy.elements.Constants.*;
 
-//OK
 public class Galaxy {
 
 	static CumulativeDistributionFunction cdf = new CumulativeDistributionFunction();
@@ -85,7 +84,7 @@ public class Galaxy {
 	}
 
 	public Galaxy() {
-		this(16000, 4000, 0.0004, 0.9, 0.9, 200, 300, 50000);
+		this(16000, 4000, 0.0004, 0.9, 0.9, 200, 300, 5000);
 	}
 
 	public double rnd_spread(double v, double o) {
@@ -143,9 +142,12 @@ public class Galaxy {
 
 		// Initialisation des étoiles
 		cdf.SetupRealistic(1.0, 0.02, m_radGalaxy / 3.0, m_radCore, 0, m_radFarField, 1000);
+		double x, y, rad;
 
 		for (int i = 3; i < m_numStars; i++) {
-			double rad = cdf.ValFromProp(Math.random());
+			x = 2 * m_radGalaxy * Math.random() - m_radGalaxy;
+			y = 2 * m_radGalaxy * Math.random() - m_radGalaxy;
+			rad = Math.sqrt(x * x + y * y);
 
 			m_pStars.get(i).m_a = rad;
 			m_pStars.get(i).m_b = rad * GetExcentricity(rad);
@@ -154,18 +156,13 @@ public class Galaxy {
 			m_pStars.get(i).m_velTheta = GetOrbitalVelocity(rad);
 			m_pStars.get(i).m_center = new Vector2f(0, 0);
 			m_pStars.get(i).m_temp = 6000 + (6000 * Math.random()) - 3000;
-			m_pStars.get(i).m_mag = 0.1 + 0.4 * Math.random();			
-			
-			if(i == 9) {
-				System.out.println(m_radFarField);
-			}
+			m_pStars.get(i).m_mag = 0.1 + 0.4 * Math.random();
 			
 			int idx = (int) Math.floor(Math.min(1.0 / dh * (m_pStars.get(i).m_a + m_pStars.get(i).m_b) / 2.0, 99.0));
 			m_numberByRad[idx]++;
 		}
 
 		// Initialisation de la poussière
-		double x, y, rad;
 		for (int i = 0; i < m_numDust; i++) {
 			x = 2 * m_radGalaxy * Math.random() - m_radGalaxy;
 			y = 2 * m_radGalaxy * Math.random() - m_radGalaxy;
@@ -205,10 +202,6 @@ public class Galaxy {
 			m_pH2.get(k1).m_mag = 0.1 + 0.05 * Math.random();
 			int idx = (int) Math.floor(Math.min(1.0 / dh * (m_pH2.get(k1).m_a + m_pH2.get(k1).m_b) / 2.0, 99.0)); // int
 			m_numberByRad[idx]++;
-
-			if(Double.isInfinite(m_pH2.get(k1).m_velTheta)) {
-				System.out.println(i);
-			}
 			
 			int k2 = 2 * i + 1;
 			m_pH2.get(k2).m_a = rad + 1000;

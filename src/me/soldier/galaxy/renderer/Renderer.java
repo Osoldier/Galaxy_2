@@ -8,13 +8,13 @@ import static org.lwjgl.opengl.GL20.*;
 import java.nio.*;
 import java.util.*;
 
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
-
 import me.soldier.galaxy.core.*;
 import me.soldier.galaxy.elements.*;
 
-//TODO Passer les positions aux shaders au lieu de recréer les buffers, ou utiliser dynamic_draw
+import org.lwjgl.*;
+import org.lwjgl.opengl.*;
+
+//TODO Ne pas recréer les floatBuffer ?
 public class Renderer {
 
 	int m_colNum = 200;
@@ -36,23 +36,27 @@ public class Renderer {
 	public Renderer(Galaxy pGalaxy) {
 		this.galaxy = pGalaxy;
 		initGL();
+		initVBO();
 		main = new Shader("main.vert", "main.frag");
 		main.setUniformMat4f("pr_matrix", pr_matrix);
 	}
 	
 	private void initGL() {
-		GLContext.createFromCurrent();
+		GLContext glc = GLContext.createFromCurrent();
+		if(!glc.getCapabilities().OpenGL20) {
+			System.out.println("Error");
+			return;
+		}
+		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 		glEnable(GL_POINT_SPRITE);
-		glEnable(GL_TEXTURE_2D);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		glClearColor(0, 0, 0.03f, 1);
 
 		particleTexture = new Texture("/particle.png");
 		float ffr = (float) (galaxy.GetFarFieldRad());
 		pr_matrix = new ProjectionMatrix(-ffr, ffr, -ffr, ffr, -1, 10);
-
 	}
 
 
@@ -61,31 +65,34 @@ public class Renderer {
 		main.setUniform("us2dTexture", particleTexture.getId());
 		glActiveTexture(GL_TEXTURE0+particleTexture.getId());
 		particleTexture.bind();
-		galaxy.ml_matrix.Identity();
-		main.setUniformMat4f("ml_matrix", galaxy.ml_matrix);
+
 		main.useShader();
 
 		RenderStars();
 		RenderDust();
 		RenderH2();
 	}
+	
+	private void initVBO() {
+		vertexBuffer = createVBOID();
+		colorBuffer = createVBOID();
+		pointSizeBuffer = createVBOID();
+	}
 
 	private void RenderSprites(float[] vertices, float[] colors, float[] sizes) {
 		glEnableVertexAttribArray(main.getAttributeLocation("av3VertexPosition"));
-		vertexBuffer = createVBOID();
 		vertexBufferData(vertexBuffer, createFloatBuffer(vertices));
 		glVertexAttribPointer(main.getAttributeLocation("av3VertexPosition"), 3, GL_FLOAT, false, 0, 0);
 
 		glEnableVertexAttribArray(main.getAttributeLocation("av3VertexColor"));
-		colorBuffer = createVBOID();
 		vertexBufferData(colorBuffer, createFloatBuffer(colors));
 		glVertexAttribPointer(main.getAttributeLocation("av3VertexColor"), 3, GL_FLOAT, false, 0, 0);
 
 		glEnableVertexAttribArray(main.getAttributeLocation("afPointSize"));
-		pointSizeBuffer = createVBOID();
 		vertexBufferData(pointSizeBuffer, createFloatBuffer(sizes));
 		glVertexAttribPointer(main.getAttributeLocation("afPointSize"), 1, GL_FLOAT, false, 0, 0);
 
+		glEnableClientState(GL_VERTEX_ARRAY);
 		glDrawArrays(GL_POINTS, 0, vertices.length / 3);
 	}
 
@@ -203,7 +210,7 @@ public class Renderer {
 
 	private void vertexBufferData(int id, FloatBuffer data) {
 		glBindBuffer(GL_ARRAY_BUFFER, id);
-		glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, data, GL_DYNAMIC_DRAW);
 	}
 	
 	public static FloatBuffer createFloatBuffer(float[] array) {

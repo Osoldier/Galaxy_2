@@ -37,10 +37,6 @@ public class Star {
 		double beta = -m_angle;
 		double alpha = theta * DEG_TO_RAD;
 
-		if(Double.isInfinite(alpha) || Double.isInfinite(beta)) {
-			return this.m_pos;
-		}
-		
 		double cosalpha = Math.cos(alpha);
 		double sinalpha = Math.sin(alpha);
 		double cosbeta = Math.cos(beta);

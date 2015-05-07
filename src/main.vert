@@ -1,11 +1,10 @@
 #version 120
-precision highp float;
+//precision highp float;
 
 attribute vec3 av3VertexPosition;
 attribute vec3 av3VertexColor;
 attribute float afPointSize;
 
-uniform mat4 ml_matrix;
 uniform mat4 pr_matrix;
 
 varying vec4 vv4Color;

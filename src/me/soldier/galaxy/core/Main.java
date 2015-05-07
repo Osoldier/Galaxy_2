@@ -26,7 +26,7 @@ public class Main implements Runnable {
 	
 	//SPE
 	private Galaxy galaxy = null;
-	private int timeStepSize = 1000000;
+	private int timeStepSize = 500000;
 	private Renderer glRenderer;
 	
 	//BASE
@@ -43,7 +43,7 @@ public class Main implements Runnable {
 		}
 
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-		window = glfwCreateWindow(width, height, "TITRE", NULL, NULL);
+		window = glfwCreateWindow(width, height, "GalaxIbanez", NULL, NULL);
 		if (window == NULL) {
 			System.err.println("Could not create GLFW window!");
 			return;
