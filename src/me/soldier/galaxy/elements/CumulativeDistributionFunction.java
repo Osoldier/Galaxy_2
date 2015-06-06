@@ -41,10 +41,13 @@ public class CumulativeDistributionFunction {
 		double h = 1.0 / m_vY2.size();
 		
 		int i = (int) Math.floor(fVal / h);
+
 		double remainder = fVal - i * h;
 		//FIX
 		if(i >= 999) i = 998;
 		
+		double f = m_vM2.get(i);
+		System.out.println(f);
 		return (m_vY2.get(i) + m_vM2.get(i) * remainder);
 	}
 	
@@ -87,8 +90,9 @@ public class CumulativeDistributionFunction {
 		}
 
 		double m_vY1_last = m_vY1.get(m_vY1.size() - 1);
-		for (int i = 0; i < m_vY1.size()-1; i++) {
+		for (int i = 0; i < m_vY1.size(); i++) {
 			m_vY1.set(i, m_vY1.get(i) / m_vY1_last);
+			if(i < m_vM1.size())
 			m_vM1.set(i, m_vM1.get(i) / m_vY1_last);
 		}
 
@@ -99,9 +103,9 @@ public class CumulativeDistributionFunction {
 		for (int i = 1, k = 0; i < pnSteps; ++i) {
 			p = i * h;
 
-			// for(;m_vY1.get(k + 1) <= p; ++k) {
-			//
-			// }
+			 for(;m_vY1.get(k + 1) <= p; ++k) {
+			
+			 }
 
 			y = m_vX1.get(k) + (p - m_vY1.get(k)) / m_vM1.get(k);
 

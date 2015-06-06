@@ -92,7 +92,6 @@ public class Renderer {
 		vertexBufferData(pointSizeBuffer, createFloatBuffer(sizes));
 		glVertexAttribPointer(main.getAttributeLocation("afPointSize"), 1, GL_FLOAT, false, 0, 0);
 
-		glEnableClientState(GL_VERTEX_ARRAY);
 		glDrawArrays(GL_POINTS, 0, vertices.length / 3);
 	}
 

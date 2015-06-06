@@ -84,7 +84,7 @@ public class Galaxy {
 	}
 
 	public Galaxy() {
-		this(16000, 4000, 0.0004, 0.9, 0.9, 200, 300, 5000);
+		this(16000, 4000, 0.0004, 0.9, 0.9, 200, 300, 50000);
 	}
 
 	public double rnd_spread(double v, double o) {
@@ -147,7 +147,7 @@ public class Galaxy {
 		for (int i = 3; i < m_numStars; i++) {
 			x = 2 * m_radGalaxy * Math.random() - m_radGalaxy;
 			y = 2 * m_radGalaxy * Math.random() - m_radGalaxy;
-			rad = Math.sqrt(x * x + y * y);
+			rad = cdf.ValFromProp(Math.random());
 
 			m_pStars.get(i).m_a = rad;
 			m_pStars.get(i).m_b = rad * GetExcentricity(rad);
