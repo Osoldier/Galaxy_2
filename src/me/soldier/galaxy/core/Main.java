@@ -43,6 +43,7 @@ public class Main implements Runnable {
 		}
 
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+		glfwSwapInterval(0);
 		window = glfwCreateWindow(width, height, "GalaxIbanez", NULL, NULL);
 		if (window == NULL) {
 			System.err.println("Could not create GLFW window!");
