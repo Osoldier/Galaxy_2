@@ -99,11 +99,10 @@ public class Main implements Runnable {
 	
 	private void render() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		glRenderer.RenderScene();
 		int error = glGetError();
 		if (error != GL_NO_ERROR)
 			System.out.println("Error " + error);
-		glRenderer.RenderScene();
 		glfwSwapBuffers(window);
 	}
 	private void update() {
